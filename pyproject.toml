@@ -1,0 +1,24 @@
+[build-system]
+requires = ["flit_core==3.9.0"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "helpline"
+authors = [{name = "Phil Yeeles", email = "pyeeles@acas.org.uk"}]
+readme = "README.md"
+license = {file = "LICENSE"}
+classifiers = [
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3.11",
+]
+dynamic = ["version", "description"]
+dependencies = [
+  "pandas==2.2.2",
+  "numpy==1.26.4",
+  "nltk==3.8.1",
+  "gensim==4.3.3",
+  "gsdmm@git+https://github.com/rwalk/gsdmm@4ad1b6b6976743681ee4976b4573463d359214ee"
+]
+
+[project.urls]
+Home = "https://www.acas.org.uk"
