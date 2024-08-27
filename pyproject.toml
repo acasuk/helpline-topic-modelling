@@ -17,6 +17,7 @@ dependencies = [
   "numpy==1.26.4",
   "nltk==3.8.1",
   "gensim==4.3.3",
+  "spacy==3.7.6",
   "gsdmm@git+https://github.com/rwalk/gsdmm@4ad1b6b6976743681ee4976b4573463d359214ee"
 ]
 
