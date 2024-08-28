@@ -73,7 +73,7 @@ def lemmatise_call(filename):
                          allowed_postags=["NOUN", "VERB", "ADJ", "ADV"])
     call_lem = remove_stopwords(call_lem)
 
-    return (text, " ".join(reduce(iconcat, call_lem, [])))
+    return (text, call_lem, " ".join(reduce(iconcat, call_lem, [])))
 
 def pickle_calls(files,outfile_prefix):
     """
@@ -88,7 +88,7 @@ def pickle_calls(files,outfile_prefix):
         print(str(i)+" / "+str(len(files))+":\tProcessing:\t"+f)
         doc = lemmatise_call(f)
         docs_raw.append(doc[0])
-        docs_processed.append(doc[1])
+        docs_processed.append(doc[2])
         print(str(i)+" / "+str(len(files))+":\tFinished:\t"+f)
 
     print("\nRaw:\t\t"+str(len(docs_raw))+" documents")
