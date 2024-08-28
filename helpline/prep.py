@@ -1,7 +1,8 @@
 """
-Utility functions to prepare and pickle large numbers of documents.
+Utility functions to prepare large numbers of documents.
 """
 
+import os
 import pickle
 import pandas as pd
 import nltk
@@ -9,17 +10,20 @@ import nltk
 # Install/Update NLTK punkt package
 nltk.download("punkt")
 
-# Load BO's stopwords list
-with open("BO_stopwords.pkl", "rb") as infile:
-    stop_words = pickle.load(infile) + [
-        "remove"
-    ]  # To cover e.g.  "person removed", "name removed", "phone removed"
-
+def _list_files(directory):
+    """
+    TODO
+    """
+    return [os.path.join(dp, f) for dp, dn, fn in os.walk(os.path.expanduser(directory)) for f in fn]
 
 def lemmatise_call(filename):
     """
     Lemmatise a text TODO
     """
+    # Load BO's stopwords list
+    with open("BO_stopwords.pkl", "rb") as infile:
+        stop_words = pickle.load(infile) + [ "remove" ]  # To cover e.g.  "person removed", "name removed", "phone removed"
+
     doc = pd.read_csv(filename)
     call = pd.DataFrame(nltk.sent_tokenize(text), columns=["Conversation"])
     call["Conversation"] = [
@@ -70,3 +74,36 @@ def lemmatise_call(filename):
     call_lem = remove_stopwords(call_lem)
 
     return (text, " ".join(reduce(iconcat, call_lem, [])))
+
+def pickle_calls(files,outfile_prefix):
+    """
+    TODO
+    """
+    i = 0
+    docs_raw = []
+    docs_processed = []
+
+    for f in files:
+        i=i+1
+        print(str(i)+" / "+str(len(files))+":\tProcessing:\t"+f)
+        doc = lemmatise_call(f)
+        docs_raw.append(doc[0])
+        docs_processed.append(doc[1])
+        print(str(i)+" / "+str(len(files))+":\tFinished:\t"+f)
+
+    print("\nRaw:\t\t"+str(len(docs_raw))+" documents")
+    print("Processed:\t"+str(len(docs_processed))+" documents\n")
+
+    print("Pickling raw docs...")
+    with open(outfile_prefix+"_raw_docs.pkl","wb") as f:
+        pickle.dump(docs_raw,f,pickle.HIGHEST_PROTOCOL)
+    print("Pickling processed docs...")
+    with open(outfile_prefix+"_processed_docs.pkl","wb") as f:
+        pickle.dump(docs_processed,f,pickle.HIGHEST_PROTOCOL)
+
+    with open(outfile_prefix+"_raw_docs.pkl","rb") as f:
+        assert len(pickle.load(f))==len(files)
+    with open(outfile_prefix+"_processed_docs.pkl","rb") as f:
+        assert len(pickle.load(f))==len(files)
+
+    print("Finished!")
