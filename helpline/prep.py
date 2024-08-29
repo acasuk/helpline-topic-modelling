@@ -3,9 +3,15 @@ Utility functions to prepare large numbers of documents.
 """
 
 import os
+import importlib.resources
 import pickle
 import pandas as pd
+import re
+import gensim
+import spacy
 import nltk
+from functools import reduce
+from operator import iconcat
 
 # Install/Update NLTK punkt package
 nltk.download("punkt")
@@ -26,12 +32,15 @@ def lemmatise_call(filename):
     Lemmatise a text TODO
     """
     # Load BO's stopwords list
-    with open("BO_stopwords.pkl", "rb") as infile:
+    with open(
+            os.path.join(importlib.resources.files("helpline"),
+                         "BO_stopwords.pkl"), "rb") as infile:
         stop_words = pickle.load(infile) + [
             "remove"
         ]  # To cover e.g.  "person removed", "name removed", "phone removed"
 
     doc = pd.read_csv(filename)
+    text = " ".join(list(map(str,doc["Text"].to_list())))
     call = pd.DataFrame(nltk.sent_tokenize(text), columns=["Conversation"])
     call["Conversation"] = [
         re.sub("\s+", " ", sent) for sent in call["Conversation"]
@@ -61,7 +70,7 @@ def lemmatise_call(filename):
 
     def remove_stopwords(texts):
         return [[
-            word for word in simple_preprocess(str(doc))
+            word for word in gensim.utils.simple_preprocess(str(doc))
             if word not in gensim.parsing.preprocessing.STOPWORDS.union(
                 set(stop_words))
         ] for doc in texts]
