@@ -104,6 +104,7 @@ def topic_to_vectors_with_centroids(mgp, model):
     TODO
     """
     topics = list(map(cwd_to_list, mgp.cluster_word_distribution))
+    topics = list(filter(lambda l: l!=[],topics)) # Remove empty topics
     for t in range(len(topics)):
         for w in range(len(topics[t])):
             # print(str(t)+": "+topics[t][w])
