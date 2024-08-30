@@ -99,7 +99,7 @@ def vector_to_word(v, model):
     return model.similar_by_vector(v, topn=1)[0]
 
 
-def mgp_topics_to_centroids(mgp, model):
+def topic_to_vectors_with_centroids(mgp, model):
     """
     TODO
     """
