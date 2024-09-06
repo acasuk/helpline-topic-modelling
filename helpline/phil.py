@@ -104,7 +104,7 @@ def topic_to_vectors_with_centroids(mgp, model):
     TODO
     """
     topics = list(map(cwd_to_list, mgp.cluster_word_distribution))
-    topics = list(filter(lambda l: l!=[],topics)) # Remove empty topics
+    topics = list(filter(lambda l: l != [], topics))  # Remove empty topics
     for t in range(len(topics)):
         for w in range(len(topics[t])):
             # print(str(t)+": "+topics[t][w])
@@ -114,6 +114,14 @@ def topic_to_vectors_with_centroids(mgp, model):
                     KeyError
             ):  # Was complaining when hitting a word with no vector ("manaja" in this case)
                 topics[t][w] = None  # If word not found, return None
+
+    # Remove any topics with all Nones
+    dodgy = []
+    for i in range(len(topics)):
+        if all(list(map(lambda t: isinstance(t, type(None)), topics[i]))):
+            dodgy.append(i)
+    for i in dodgy:
+        del topics[i]
 
     # Replace Nones with centroids
     for t in topics:
