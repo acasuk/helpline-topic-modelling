@@ -18,7 +18,7 @@ def p_cooccurrence(w_i, w_j, document, window_size=2):
         document[i : i + window_size] for i in range(len(document) - window_size)
     ]
     return sum(
-        list(map(lambda window: int((w_i in window) and (w_j in window))))
+        list(map(lambda window: int((w_i in window) and (w_j in window)), windows))
     ) / len(windows)
 
 
