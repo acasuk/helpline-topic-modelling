@@ -11,7 +11,7 @@ import numpy as np
 
 
 def p_cooccurrence(w_i, w_j, document, window_size=2):
-    assert window_size <= document
+    assert window_size <= len(document)
     assert window_size > 1
     window_size -= 1
     windows = [
