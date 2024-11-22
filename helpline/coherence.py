@@ -26,7 +26,10 @@ def pmi_k(w_i, w_j, topic, k=1, window_size=2, epsilon=1):
     prob_w_i = topic.count(w_i) / len(topic)
     prob_w_j = topic.count(w_j) / len(topic)
     return math.log2(
-        ((p_cooccurrence(w_i, w_j, topic, window_size=window_size) ^ k) + epsilon)
+        (
+            (np.power(p_cooccurrence(w_i, w_j, topic, window_size=window_size), k))
+            + epsilon
+        )
         / (prob_w_i * prob_w_j)
     )
 
